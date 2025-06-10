@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kalkulator Interaktif Modern rafi (0059)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Warna dasar */
+      --color-bg-light: #ffffff;
+      --color-bg-dark: #111827;
+      --color-primary: #111827;
+      --color-primary-hover: #374151;
+      --color-accent: #3b82f6;
+      --color-accent-hover: #2563eb;
+      --color-error: #ef4444;
+      --color-text-dark: #111827;
+      --color-text-light: #f9fafb;
+      --color-text-muted: #6b7280;
+      --radius-card: 0.75rem;
+      --shadow-light: 0 10px 20px rgba(0, 0, 0, 0.05);
+      --shadow-dark: 0 10px 20px rgba(0, 0, 0, 0.6);
+      --transition-fast: 0.2s ease;
+    }
+
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--color-bg-light);
+      color: var(--color-text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 1rem 3rem;
+      scroll-behavior: smooth;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    /* DARK MODE */
+    body.dark-mode {
+      background: var(--color-bg-dark);
+      color: var(--color-text-light);
+    }
+
+    /* Container utama */
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--color-bg-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow-light);
+      z-index: 100;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    body.dark-mode header {
+      background: var(--color-bg-dark);
+      box-shadow: var(--shadow-dark);
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--color-primary);
+      user-select: none;
+      cursor: default;
+    }
+
+    body.dark-mode .logo {
+      color: var(--color-text-light);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Tombol toggle tema */
+    #theme-toggle-btn {
+      background-color: var(--color-accent);
+      color: var(--color-text-light);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color var(--transition-fast);
+      user-select: none;
+    }
+
+    #theme-toggle-btn:hover,
+    #theme-toggle-btn:focus {
+      background-color: var(--color-accent-hover);
+      outline: none;
+    }
+
+    #theme-toggle-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding-top: 6rem;
+      padding-bottom: 4rem;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    .hero h1 {
+      font-weight: 800;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+      color: var(--color-primary);
+      user-select: none;
+    }
+
+    body.dark-mode .hero h1 {
+      color: var(--color-text-light);
+    }
+
+    .hero p {
+      font-weight: 500;
+      font-size: 1.25rem;
+      color: var(--color-text-muted);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero button {
+      background-color: var(--color-primary);
+      color: var(--color-text-light);
+      border: none;
+      padding: 1rem 2.5rem;
+      font-weight: 700;
+      font-size: 1.125rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      user-select: none;
+      box-shadow: 0 6px 15px rgba(17, 24, 39, 0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero button:hover,
+    .hero button:focus {
+      background-color: var(--color-primary-hover);
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    /* Kalkulator Card */
+    .calculator-container {
+      background: var(--color-bg-light);
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-light);
+      padding: 2rem 3rem;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+      user-select: none;
+    }
+
+    body.dark-mode .calculator-container {
+      background: #1f2937;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .calculator-container h2 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--color-primary);
+      user-select: none;
+    }
+
+    body.dark-mode .calculator-container h2 {
+      color: var(--color-text-light);
+    }
+
+    form {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    input[type=number],
+    select {
+      padding: 0.85rem 1.25rem;
+      font-size: 1rem;
+      border-radius: 0.625rem;
+      border: 1.5px solid #d1d5db;
+      transition: border-color var(--transition-fast);
+      user-select: text;
+    }
+
+    input[type=number]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 10px var(--color-accent);
+    }
+
+    body.dark-mode input[type=number],
+    body.dark-mode select {
+      background: #374151;
+      border-color: #6b7280;
+      color: var(--color-text-light);
+    }
+
+    body.dark-mode input[type=number]:focus,
+    body.dark-mode select:focus {
+      box-shadow: 0 0 10px #a5b4fc;
+    }
+
+    /* Tombol utama */
+    button[type=submit] {
+      background-color: var(--color-accent);
+      color: var(--color-text-light);
+      font-weight: 700;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      font-size: 1.125rem;
+      cursor: pointer;
+      transition: background-color var(--transition-fast), transform var(--transition-fast);
+      user-select: none;
+    }
+
+    button[type=submit]:hover,
+    button[type=submit]:focus {
+      background-color: var(--color-accent-hover);
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    /* Tombol reset */
+    .reset-btn {
+      background-color: var(--color-error);
+      color: var(--color-text-light);
+      font-weight: 700;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      font-size: 1.125rem;
+      cursor: pointer;
+      transition: background-color var(--transition-fast), transform var(--transition-fast);
+      user-select: none;
+    }
+
+    .reset-btn:hover,
+    .reset-btn:focus {
+      background-color: #b91c1c;
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    /* Area hasil */
+    #hasil {
+      margin-top: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      font-size: 1.5rem;
+      min-height: 2.5em;
+      transition: opacity 0.4s ease;
+      user-select: text;
+    }
+
+    .error {
+      color: var(--color-error);
+    }
+
+    /* Riwayat perhitungan */
+    .history {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      line-height: 1.4;
+      user-select: text;
+      max-height: 150px;
+      overflow-y: auto;
+      border-radius: var(--radius-card);
+      padding: 0.8rem 1rem;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+      background-color: #f9fafb;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    body.dark-mode .history {
+      background-color: #374151;
+      color: var(--color-text-light);
+      box-shadow: inset 0 0 8px rgba(255 255 255 / 0.1);
+    }
+
+    /* Scrollbar styling */
+    .history::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .history::-webkit-scrollbar-thumb {
+      background-color: var(--color-accent);
+      border-radius: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .calculator-container {
+        padding: 2rem 1.5rem;
+      }
+
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+
+      button[type=submit],
+      .reset-btn {
+        font-size: 1rem;
+        padding: 0.85rem;
+      }
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .tooltip:hover .tooltip-text,
+    .tooltip:focus-within .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tooltip-text {
+      visibility: hidden;
+      width: max-content;
+      max-width: 200px;
+      background-color: var(--color-primary);
+      color: var(--color-text-light);
+      text-align: center;
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      position: absolute;
+      z-index: 10;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      font-size: 0.875rem;
+      pointer-events: none;
+      user-select: none;
+    }
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container" role="banner" style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="logo" aria-label="Logo Kalkulator Interaktif">Kalkulator Interaktif</div>
+      <button id="theme-toggle-btn" aria-label="Toggle light/dark mode" class="tooltip" type="button" tabindex="0" >
+        <!-- Ikon mode terang, bulan untuk mode gelap -->
+        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <circle cx="12" cy="12" r="5" stroke-width="2"></circle>
+          <line x1="12" y1="1" x2="12" y2="3" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="12" y1="21" x2="12" y2="23" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="1" y1="12" x2="3" y2="12" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="21" y1="12" x2="23" y2="12" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="2" stroke-linecap="round"></line>
+        </svg>
+        <span class="tooltip-text" id="theme-tooltip">Mode Gelap</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <section class="hero" aria-label="Hero section">
+      <h1>Hitung Cepat, Mudah, dan Akurat</h1>
+      <p>Kalkulator interaktif dengan berbagai operasi 
+      </p>
+      <button type="button" aria-label="Lihat Kalkulator" onclick="scrollToCalculator()">Mulai Menghitung</button>
+    </section>
+
+    <section class="calculator-container" aria-label="Kalkulator Interaktif Modern">
+      <h2>Kalkulator Interaktif</h2>
+      <form id="calc-form" onsubmit="event.preventDefault(); hitung();">
+        <label for="angka1" class="sr-only">Angka pertama</label>
+        <input type="number" id="angka1" placeholder="Masukkan angka pertama" required autocomplete="off" />
+
+        <label for="operator" class="sr-only">Operator</label>
+        <select id="operator" aria-describedby="operator-desc">
+          <option value="+">Tambah (+)</option>
+          <option value="-">Kurang (-)</option>
+          <option value="*">Kali (×)</option>
+          <option value="/">Bagi (÷)</option>
+          <option value="^">Pangkat (^)</option>
+          <option value="%">Modulus (%)</option>
+          <option value="sqrt">Akar Kuadrat (√)</option>
+        </select>
+        <div id="operator-desc" class="sr-only">Pilih operasi matematika</div>
+
+        <label for="angka2" class="sr-only">Angka kedua</label>
+        <input type="number" id="angka2" placeholder="Masukkan angka kedua" required autocomplete="off" />
+
+        <div style="display:flex;gap:1rem; flex-wrap: wrap;">
+          <button type="submit" aria-label="Hitung hasil">Hitung</button>
+          <button type="button" class="reset-btn" aria-label="Reset formulir" onclick="resetForm()">Reset</button>
+        </div>
+      </form>
+
+      <div id="hasil" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div class="history" id="history" aria-label="Riwayat perhitungan"></div>
+    </section>
+  </main>
+
+  <script>
+    const historyElem = document.getElementById("history");
+    const hasilElem = document.getElementById("hasil");
+    const operatorSelect = document.getElementById("operator");
+    const angka2Input = document.getElementById("angka2");
+    const themeToggleBtn = document.getElementById("theme-toggle-btn");
+    const themeIconSvg = document.getElementById("theme-icon");
+    const themeTooltip = document.getElementById("theme-tooltip");
+
+    let historyList = [];
+    let isDarkMode = false;
+
+    // Disable/enable angka2 input based on operator (akar kuadrat hanya butuh satu input)
+    function updateAngka2Input() {
+      const op = operatorSelect.value;
+      if (op === "sqrt") {
+        angka2Input.value = "";
+        angka2Input.disabled = true;
+        angka2Input.placeholder = "Tidak diperlukan";
+        angka2Input.setAttribute("aria-disabled", "true");
+        angka2Input.required = false;
+      } else {
+        angka2Input.disabled = false;
+        angka2Input.placeholder = "Masukkan angka kedua";
+        angka2Input.removeAttribute("aria-disabled");
+        angka2Input.required = true;
+      }
+    }
+    operatorSelect.addEventListener("change", updateAngka2Input);
+    window.addEventListener("load", updateAngka2Input);
+
+    function hitung() {
+      const angka1 = parseFloat(document.getElementById("angka1").value);
+      const angka2 = parseFloat(angka2Input.value);
+      const operator = operatorSelect.value;
+
+      hasilElem.style.opacity = "0";
+      hasilElem.classList.remove("error");
+
+      // Validasi input pertama selalu dibutuhkan
+      if (isNaN(angka1)) {
+        tampilkanError("Input angka pertama tidak valid");
+        return;
+      }
+      // Validasi angka2 hanya jika diperlukan
+      if (operator !== "sqrt" && isNaN(angka2)) {
+        tampilkanError("Input angka kedua tidak valid");
+        return;
+      }
+
+      let hasil;
+      switch (operator) {
+        case "+":
+          hasil = angka1 + angka2;
+          break;
+        case "-":
+          hasil = angka1 - angka2;
+          break;
+        case "*":
+          hasil = angka1 * angka2;
+          break;
+        case "/":
+          hasil =
+            angka2 !== 0 ? angka1 / angka2 : "Tidak bisa dibagi dengan nol";
+          break;
+        case "^":
+          hasil = Math.pow(angka1, angka2);
+          break;
+        case "%":
+          hasil =
+            angka2 !== 0 ? angka1 % angka2 : "Tidak bisa dibagi dengan nol";
+          break;
+        case "sqrt":
+          hasil = angka1 >= 0 ? Math.sqrt(angka1) : "Tidak bisa akar negatif";
+          break;
+        default:
+          hasil = "Operator tidak valid";
+      }
+
+      if (typeof hasil === "number") {
+        hasil = hasil.toFixed(4);
+      }
+
+      if (typeof hasil === "string" && hasil.includes("tidak")) {
+        tampilkanError(hasil);
+        return;
+      }
+
+      hasilElem.textContent = `Hasil: ${hasil}`;
+      fadeIn(hasilElem);
+
+      historyList.unshift(
+        operator === "sqrt"
+          ? `√${angka1} = ${hasil}`
+          : `${angka1} ${operator} ${angka2} = ${hasil}`
+      );
+      if (historyList.length > 5) historyList.pop();
+
+      updateHistory();
+    }
+
+    function tampilkanError(msg) {
+      hasilElem.textContent = msg;
+      hasilElem.classList.add("error");
+      fadeIn(hasilElem);
+    }
+
+    function fadeIn(elem) {
+      elem.style.opacity = 0;
+      let op = 0;
+      const interval = setInterval(() => {
+        if (op >= 1) clearInterval(interval);
+        elem.style.opacity = op;
+        op += 0.1;
+      }, 30);
+    }
+
+    function updateHistory() {
+      if (historyList.length === 0) {
+        historyElem.innerHTML = "";
+        return;
+      }
+      historyElem.innerHTML =
+        "<strong>Riwayat Perhitungan:</strong><br>" +
+        historyList.join("<br>");
+    }
+
+    function resetForm() {
+      document.getElementById("angka1").value = "";
+      angka2Input.value = "";
+      operatorSelect.value = "+";
+      angka2Input.disabled = false;
+      angka2Input.placeholder = "Masukkan angka kedua";
+      angka2Input.removeAttribute("aria-disabled");
+      angka2Input.required = true;
+      hasilElem.textContent = "";
+      hasilElem.classList.remove("error");
+      hasilElem.style.opacity = 1;
+    }
+
+    // Scroll ke kalkulator saat klik tombol Mulai Menghitung
+    function scrollToCalculator() {
+      document.querySelector(".calculator-container").scrollIntoView({ behavior: "smooth" });
+      document.getElementById("angka1").focus();
+    }
+
+    // Toggle tema terang/gelap dan ganti ikon + tooltip
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      document.body.classList.toggle("dark-mode", isDarkMode);
+      updateThemeButton();
+    }
+
+    function updateThemeButton() {
+      if (isDarkMode) {
+        themeTooltip.textContent = "Mode Terang";
+        themeIconSvg.innerHTML = `
+          <circle cx="12" cy="12" r="5" stroke-width="2"></circle>
+          <line x1="12" y1="1" x2="12" y2="3" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="12" y1="21" x2="12" y2="23" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="1" y1="12" x2="3" y2="12" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="21" y1="12" x2="23" y2="12" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="2" stroke-linecap="round"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="2" stroke-linecap="round"></line>
+        `;
+      } else {
+        themeTooltip.textContent = "Mode Gelap";
+        themeIconSvg.innerHTML = `
+          <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+        `;
+      }
+    }
+
+    // Event listener tombol tema
+    themeToggleBtn.addEventListener("click", toggleTheme);
+
+    // Keyboard support untuk enter dan escape
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        if (document.activeElement.tagName !== "BUTTON") {
+          e.preventDefault();
+          hitung();
+        }
+      }
+      else if (e.key === "Escape") {
+        resetForm();
+      }
+    });
+
+  </script>
+
+  <style>
+    /* Screen reader only */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+  </style>
+
+</body>
+
+</html>
+
